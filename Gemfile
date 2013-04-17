@@ -8,7 +8,6 @@ gem 'rabl-rails'
 gem 'will_paginate'
 gem 'tire'
 gem 'unicorn'
-gem 'devise'
 
 gem 'oauth'
 gem 'nokogiri'

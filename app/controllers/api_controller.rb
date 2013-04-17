@@ -3,8 +3,8 @@ class ApiController < ApplicationController
   around_filter :response_to_jsonp
 
   # find person and update them
-  before_filter :find_person
-  after_filter :update_person_last_seen_at
+  before_filter :find_user
+  after_filter :update_user_last_seen_at
 
   class UnauthorizedError < StandardError; end
 
@@ -44,18 +44,18 @@ protected
   end
 
   def require_auth
-    raise UnauthorizedError unless @person
+    raise UnauthorizedError unless @user
   end
 
-  def find_person
-    @person ||= if !params[:access_token].blank?
-      Person.find_by_access_token(params[:access_token])
+  def find_user
+    @user ||= if !params[:access_token].blank?
+      User.find_by_access_token(params[:access_token])
     elsif !params[:email].blank? && !params[:password].blank?
-      Person.authenticate(params[:email], params[:password])
+      User.authenticate(params[:email], params[:password])
     end
   end
 
-  def update_person_last_seen_at
-    @person.was_seen! if @person
+  def update_user_last_seen_at
+    @user.was_seen! if @user
   end
 end
