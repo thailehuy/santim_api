@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
     def find_by_access_token(access_token = '')
       seed, user_id, hash = access_token.split('.')
       return nil if user_id.blank? || seed.blank? || hash.blank?
+      return nil if Time.now.to_i > seed
       return nil unless (user = find_by_id(person_id))
       return nil unless hash == hash_access_token(user, seed)
       user
@@ -38,8 +39,8 @@ class User < ActiveRecord::Base
   end
 
   def hash_seed
-    time = 2.day.from_now.to_i
-    Digest::SHA1.hexdigest(time)
+    time = 1.day.from_now.to_i
+    # Digest::SHA1.hexdigest(time)
   end
 
   protected

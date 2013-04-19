@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title Santim
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    .hidden
+      %h1 Santim.vn
+      %p Where you can barter god
+      %ul
+        %li
+          = link_to "Sign in", '#signin'

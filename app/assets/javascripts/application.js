@@ -12,4 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require ./scope-js/scope.js
+//= require ./scope-js/util.js
+//= require_tree ./scope-js
 //= require_tree .
