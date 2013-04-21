@@ -1,21 +1,14 @@
-class Api::UsersController < ApplicationController
+class Api::UsersController < ApiController
   respond_to :json
 
   before_filter :require_auth,    only: [:show, :update, :change_password]
-  before_filter :require_profile, only: [:profile]
 
   # show all of the authenticated user's info
   def show
   end
 
-  # get the info needed to show user profile
-  def profile
-    @fundraisers = @account.fundraisers.published
-    render "people/profile"
-  end
-
   def create
-    person_params = {
+    user_params = {
       email:                  params[:email],
       display_name:           params[:display_name],
       first_name:             params[:first_name],
@@ -27,17 +20,19 @@ class Api::UsersController < ApplicationController
       # Facebook and Twitter
       when /^(facebook|twitter):(.*)$/
         @linked_account = LinkedAccount::Base.find_by_access_token($2)
-        raise ActiveRecord::RecordNotFound unless @linked_account && @linked_account.person.nil?
+        raise ActiveRecord::RecordNotFound unless @linked_account && @linked_account.user.nil?
 
-        # create person
-        @user = User.create!(person_params.merge(password: "Aa1#{SecureRandom.urlsafe_base64}"))
+        # create user
+        @user = User.create!(user_params.merge(password: "Aa1#{SecureRandom.urlsafe_base64}"))
         # link github account
-        @linked_account.link_with_person(@user)
+        @linked_account.link_with_user(@user)
 
       else
         # normal use case
-        @user = User.create!(person_params)
+        @user = User.create!(user_params)
     end
+
+    render "users/show"
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Unable to create account: Invalid account link" }, status: :unprocessable_entity
   rescue ActiveRecord::RecordInvalid => e
@@ -56,16 +51,15 @@ class Api::UsersController < ApplicationController
 
           if !(linked_account = LinkedAccount::Base.find_by_access_token($2))
             render json: { error: "Unable to find #{$1.capitalize} user", email_is_registered: true }, status: :not_found
-          elsif linked_account.person
+          elsif linked_account.user
             render json: { error: "#{$1.capitalize} account already linked", email_is_registered: true }, status: :not_found
           else
-            linked_account.link_with_person @user
+            linked_account.link_with_user @user
           end
 
         else
           # normal login
       end
-
     end
   end
 
@@ -106,14 +100,14 @@ class Api::UsersController < ApplicationController
 
     if params[:email].blank?
       render json: { error: 'Must provide account email address or display name' }, status: :bad_request
-    elsif (person = User.find_by_email(params[:email]))
-      if person.reset_password_code == params[:code]
-        person.password = params[:new_password]
+    elsif (user = User.find_by_email(params[:email]))
+      if user.reset_password_code == params[:code]
+        user.password = params[:new_password]
 
-        if person.save
+        if user.save
           render json: { message: 'Password reset' }, status: :reset_content
         else
-          render json: { error: "Unable to reset password: #{person.errors.full_messages.join(', ')}" }, status: :bad_request
+          render json: { error: "Unable to reset password: #{user.errors.full_messages.join(', ')}" }, status: :bad_request
         end
       else
         render json: { error: 'Reset code is not valid' }, status: :bad_request
@@ -126,19 +120,12 @@ class Api::UsersController < ApplicationController
   def request_password_reset
     require_params(:email)
 
-    if (person = User.find_by_email(params[:email]))
-      person.send_email(:reset_password)
+    if (user = User.find_by_email(params[:email]))
+      user.send_email(:reset_password)
       render json: { message: 'Password reset email sent' }
     else
       render json: { error: 'Account not found' }, status: :not_found
     end
   end
 
-protected
-
-  def require_profile
-    unless (@account = User.find_by_id(params[:profile_id]))
-      render json: { error: 'Profile not found' }, status: :not_found
-    end
-  end
 end

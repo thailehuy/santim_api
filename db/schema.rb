@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417143434) do
+ActiveRecord::Schema.define(:version => 20130420231801) do
+
+  create_table "linked_accounts", :force => true do |t|
+    t.string   "type"
+    t.integer  "user_id"
+    t.string   "uid"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "login"
+    t.string   "avatar_url"
+    t.text     "oauth_token"
+    t.string   "oauth_secret"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "first_name"
@@ -20,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20130417143434) do
     t.string   "hashed_password"
     t.datetime "last_seen_at"
     t.boolean  "admin"
+    t.string   "display_name"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

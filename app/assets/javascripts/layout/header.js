@@ -17,10 +17,7 @@ with (scope('Header','App')) {
 
         div({ style: 'float: right; margin-top: 15px;' },
           // logged in? show the user nav dropdown
-          logged_in() && [
-            span({ style: 'margin-right: 10px;'}, NotificationFeed.create),
-            UserNav.create
-          ],
+          logged_in() && UserNav.create,
 
           // not logged in? show the signin buttons!
           !logged_in() && Header.signin_buttons

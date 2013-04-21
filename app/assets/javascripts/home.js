@@ -13,7 +13,7 @@ with (scope('Home', 'App')) {
     hide('content');
 
     // make the box smaller if logged in
-    if (logged_in()) add_class(Home.top_box, 'small');
+    // if (logged_in()) add_class(Home.top_box, 'small');
 
     render({ into: 'before-content' },
       section({ id: 'homepage' },

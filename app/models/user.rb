@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
-  attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :last_seen_at
+  attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :last_seen_at, :display_name
   attr_accessor :password, :password_confirmation
 
   # if a new password was set, validate it.  if there isn't an encrypted password, require one
   validates :password,
             length: { minimum: 8 },
-            if: 'password_digest.blank? || !password.blank?'
+            if: 'hashed_password.blank? || !password.blank?'
 
   before_create :hash_password
 
@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
     def find_by_access_token(access_token = '')
       seed, user_id, hash = access_token.split('.')
       return nil if user_id.blank? || seed.blank? || hash.blank?
-      return nil if Time.now.to_i > seed
-      return nil unless (user = find_by_id(person_id))
+      return nil if Time.now.to_i.to_s > seed
+      return nil unless (user = find_by_id(user_id))
       return nil unless hash == hash_access_token(user, seed)
       user
     end

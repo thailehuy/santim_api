@@ -1,6 +1,6 @@
 with (scope('ST')) {
 
-  define('api_host', 'http://localhost:3000/');
+  define('api_host', 'http://localhost:3000/api/');
   define('www_host', document.location.href.split('#')[0]);
 
   // parse arguments: url, [http_method], [params], [callback]

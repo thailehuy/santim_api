@@ -15,8 +15,6 @@ with (scope('UserNav', 'App')) {
     ST.user_info(function(response) {
       var user = response.data;
 
-      var show_pennies = user.account.balance && user.account.balance.toString().split('.').length > 1;
-
       render({ into: UserNav._flyout },
         ul(
           li(a({ href: '#account/create_fundraiser' }, 'Create Fundraiser')),
@@ -32,9 +30,7 @@ with (scope('UserNav', 'App')) {
         div({ id: 'btn' },
           a({ href: user.frontend_path },
             img({ src: user.image_url }),
-            span(user.display_name),
-
-            (user.account.balance > 0) && span('(' + money(user.account.balance, show_pennies) + ')')
+            span(user.display_name)
           )
         ),
         UserNav._flyout

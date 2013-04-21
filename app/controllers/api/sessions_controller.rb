@@ -1,4 +1,4 @@
-class Api::SessionController < ApplicationController
+class Api::SessionController < ApiController
 
   WHITELISTED_REDIRECT_URL = /^https?:\/\/(www|api)(-qa)?\.bountysource\.(com|dev)\//
 

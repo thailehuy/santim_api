@@ -127,6 +127,7 @@ with (scope('Signin','App')) {
     ST.login({ email: refs.email.value }, function(response) {
       refs.sign_in_up_button.disabled = false;
       refs.email_is_registered = response.data.email_is_registered;
+
       auto_adjust_super_form_fields(refs);
     });
   });
