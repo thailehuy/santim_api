@@ -13,8 +13,8 @@ class LinkedAccount::Facebook < LinkedAccount::Base
   #  &scope=COMMA_SEPARATED_LIST_OF_PERMISSION_NAMES
   def self.oauth_url(options={})
     %(#{OAUTH_CODE_URL}?#{options.merge(
-      client_id:      Api::Application.config.facebook_app[:id],
-      redirect_uri:   "#{Api::Application.config.api_url}auth/facebook/callback",
+      client_id:      Santim::Application.config.facebook_app[:id],
+      redirect_uri:   "#{Santim::Application.config.api_url}auth/facebook/callback",
       state:          (options[:state].to_json unless options[:state].blank?),
       display:        options[:display] || 'page',
       scope:          options[:scope],
@@ -29,9 +29,9 @@ class LinkedAccount::Facebook < LinkedAccount::Base
   #   &code=THE_CODE_FROM_ABOVE
   def self.find_or_create_via_oauth_code(code)
     params = {
-      client_id:      Api::Application.config.facebook_app[:id],
-      client_secret:  Api::Application.config.facebook_app[:secret],
-      redirect_uri:   "#{Api::Application.config.api_url}auth/facebook/callback",
+      client_id:      Santim::Application.config.facebook_app[:id],
+      client_secret:  Santim::Application.config.facebook_app[:secret],
+      redirect_uri:   "#{Santim::Application.config.api_url}auth/facebook/callback",
       code:           code
     }
 

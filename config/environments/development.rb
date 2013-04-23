@@ -36,4 +36,19 @@ Santim::Application.configure do
   config.assets.debug = true
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  config.api_url  = 'http://api.santim.dev/'
+  config.www_url  = 'http://www.santim.dev/'
+
+  # Facebook App
+  config.facebook_app = {
+    id:     403945356369075,
+    secret: '151caa18415cd3657e6a9b20887e0d96'
+  }
+
+  # Twitter App
+  config.twitter_app = {
+    id:     'PjJR2Irb8yFPkimTVja7Q',
+    secret: 'ytvzzZZ3If1ot4AiYguMTF0hHOjhCHbAHNDKlY1g'
+  }
 end

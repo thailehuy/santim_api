@@ -2,6 +2,12 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :password, :password_confirmation, :last_seen_at, :display_name
   attr_accessor :password, :password_confirmation
 
+  has_many :auctions
+  has_many :hunts
+  has_many :bids
+  has_many :auction_bids, through: :auctions, source: :bids, class_name: "Bid"
+  has_many :hunt_bids, through: :hunts, source: :bids, class_name: "Bid"
+
   # if a new password was set, validate it.  if there isn't an encrypted password, require one
   validates :password,
             length: { minimum: 8 },

@@ -10,5 +10,10 @@ Santim::Application.routes.draw do
         post :login
       end
     end
+
+    scope path: '/auth/:provider', controller: 'sessions' do
+      root to: :login
+      get :callback
+    end
   end
 end

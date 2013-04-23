@@ -11,7 +11,45 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130420231801) do
+ActiveRecord::Schema.define(:version => 20130423003423) do
+
+  create_table "auctions", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "user_id"
+    t.integer  "starting_bid"
+    t.integer  "auto_win"
+    t.integer  "bid_step"
+    t.integer  "winning_bid_id"
+    t.datetime "deadline"
+    t.string   "status"
+    t.integer  "featured"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "bids", :force => true do |t|
+    t.integer  "amount"
+    t.integer  "biddable_id"
+    t.string   "biddable_type"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "hunts", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "user_id"
+    t.text     "reward"
+    t.integer  "winning_bid_id"
+    t.datetime "deadline"
+    t.string   "status"
+    t.integer  "featured"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   create_table "linked_accounts", :force => true do |t|
     t.string   "type"
